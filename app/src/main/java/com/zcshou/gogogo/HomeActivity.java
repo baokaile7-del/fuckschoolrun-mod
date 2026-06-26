@@ -60,7 +60,7 @@ public class HomeActivity extends BaseActivity implements HomeMineFragment.Actio
                 : savedInstanceState.getInt(KEY_SELECTED_TAB, R.id.nav_home_start);
         bottomNavigationView.setSelectedItemId(selectedTab);
 
-        checkGiteeReleaseUpdate(false);
+        // checkGiteeReleaseUpdate(false); // 已禁用版本更新检测
     }
 
     @Override
@@ -133,56 +133,7 @@ public class HomeActivity extends BaseActivity implements HomeMineFragment.Actio
     }
 
     private void checkGiteeReleaseUpdate(boolean manual) {
-        String currentVersion = GoUtils.getVersionName(this);
-        if (currentVersion == null) {
-            return;
-        }
-        if (!manual) {
-            String checkedVersion = sharedPreferences.getString(PREF_LAST_AUTO_CHECK_VERSION, "");
-            if (currentVersion.equals(checkedVersion)) {
-                return;
-            }
-        }
-        if (!GoUtils.isNetworkAvailable(this)) {
-            if (manual) {
-                GoUtils.DisplayToast(this, getString(R.string.app_error_network));
-            }
-            return;
-        }
-        if (manual) {
-            GoUtils.DisplayToast(this, getString(R.string.update_checking));
-        }
-        ioExecutor.execute(() -> {
-            try {
-                GiteeReleaseChecker checker = new GiteeReleaseChecker(okHttpClient);
-                GiteeReleaseInfo releaseInfo = checker.fetchLatestRelease();
-                sharedPreferences.edit().putString(PREF_LAST_AUTO_CHECK_VERSION, currentVersion).apply();
-                if (releaseInfo == null) {
-                    if (manual) {
-                        runOnUiThread(() -> GoUtils.DisplayToast(this, getString(R.string.update_check_failed)));
-                    }
-                    return;
-                }
-
-                String ignoredTag = sharedPreferences.getString(PREF_IGNORED_RELEASE, "");
-                boolean newer = checker.isNewerThan(releaseInfo.getTagName(), currentVersion);
-                if (!newer) {
-                    if (manual) {
-                        runOnUiThread(() -> GoUtils.DisplayToast(this, getString(R.string.update_last)));
-                    }
-                    return;
-                }
-                if (!manual && releaseInfo.getTagName().equals(ignoredTag)) {
-                    return;
-                }
-
-                runOnUiThread(() -> showReleaseUpdateDialog(releaseInfo));
-            } catch (Exception exception) {
-                if (manual) {
-                    runOnUiThread(() -> GoUtils.DisplayToast(this, buildDetailedToast(R.string.update_check_failed, exception)));
-                }
-            }
-        });
+        // 版本更新检测已禁用
     }
 
     private void showReleaseUpdateDialog(GiteeReleaseInfo releaseInfo) {
