@@ -21,6 +21,22 @@ jobs:
           echo 'MAPS_SAFE_CODE=test_safe_code' >> local.properties
           cat local.properties
 
+      - name: Generate temporary keystore and print SHA1
+        run: |
+          KEYSTORE_DIR="$HOME/.android"
+          KEYSTORE_FILE="$KEYSTORE_DIR/debug.keystore"
+          mkdir -p "$KEYSTORE_DIR"
+          keytool -genkey -v -keystore "$KEYSTORE_FILE" -alias androiddebugkey \
+            -keyalg RSA -keysize 2048 -validity 10000 \
+            -dname "CN=Android Debug,O=Android,C=US" \
+            -storepass android -keypass android 2>/dev/null
+          echo "=== SHA1 fingerprint ==="
+          keytool -list -v -keystore "$KEYSTORE_FILE" -alias androiddebugkey -storepass android 2>/dev/null | grep -i "SHA1:"
+          echo "========================"
+          echo "=== MD5 fingerprint ==="
+          keytool -list -v -keystore "$KEYSTORE_FILE" -alias androiddebugkey -storepass android 2>/dev/null | grep -i "MD5:"
+          echo "========================"
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
