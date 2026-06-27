@@ -47,7 +47,7 @@ android {
     compileSdk 36
     buildToolsVersion '36.1.0'
     defaultConfig {
-        applicationId "com.acooldog.toolbox"
+        applicationId "com.acooldog.toolboz"
         minSdkVersion 28
         targetSdkVersion 36
         versionCode 20100

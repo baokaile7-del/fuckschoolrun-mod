@@ -33,9 +33,9 @@ jobs:
           echo "=== SHA1 fingerprint ==="
           keytool -list -v -keystore "$KEYSTORE_FILE" -alias androiddebugkey -storepass android 2>/dev/null | grep -i "SHA1:"
           echo "========================"
-          echo "=== MD5 fingerprint ==="
-          keytool -list -v -keystore "$KEYSTORE_FILE" -alias androiddebugkey -storepass android 2>/dev/null | grep -i "MD5:"
-          echo "========================"
+          echo "=== MD5 fingerprint (optional) ==="
+          keytool -list -v -keystore "$KEYSTORE_FILE" -alias androiddebugkey -storepass android 2>/dev/null | grep -i "MD5:" || true
+          echo "======================================"
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
