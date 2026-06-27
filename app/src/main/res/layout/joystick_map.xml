@@ -42,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="450dp">
 
-        <org.osmdroid.views.MapView
+        <com.baidu.mapapi.map.MapView
             android:id="@+id/map_joystick"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

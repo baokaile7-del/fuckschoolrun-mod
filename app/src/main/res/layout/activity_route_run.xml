@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <org.osmdroid.views.MapView
+    <com.baidu.mapapi.map.MapView
         android:id="@+id/map_run"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
