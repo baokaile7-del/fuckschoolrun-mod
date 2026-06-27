@@ -17,8 +17,8 @@ jobs:
 
       - name: Inject API Key
         run: |
-          echo 'MAPS_API_KEY=test_key' >> local.properties
-          echo 'MAPS_SAFE_CODE=test_safe_code' >> local.properties
+          echo 'MAPS_API_KEY=${{ secrets.MAPS_API_KEY }}' >> local.properties
+          echo 'MAPS_SAFE_CODE=${{ secrets.MAPS_SAFE_CODE }}' >> local.properties
           cat local.properties
 
       - name: Generate temporary keystore and print SHA1
