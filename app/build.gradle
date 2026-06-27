@@ -23,14 +23,7 @@ def escapeBuildConfigString = { value ->
     value.replace('\\', '\\\\').replace('"', '\\"')
 }
 
-<<<<<<< HEAD
 def shareApiBaseUrl = readLocalConfig("SHARE_API_BASE_URL")
-=======
-def mapsApiKey = readLocalConfig("MAPS_API_KEY")
-def mapsSafeCode = readLocalConfig("MAPS_SAFE_CODE")
-def shareApiBaseUrl = readLocalConfig("SHARE_API_BASE_URL")
-def baiduManifestApiKey = mapsApiKey.trim().isEmpty() ? "NO_BAIDU_MAPS_API_KEY_CONFIGURED" : mapsApiKey
->>>>>>> 3ca7fc1c80ebc5267625704d5b172f90dbd90d2f
 def preferredKeystore = file('..\\keystore\\SchoolRun.jks')
 def legacyKeystore = file('..\\keystore\\GoGoGo.jks')
 def projectKeystore = preferredKeystore.exists() ? preferredKeystore : legacyKeystore
