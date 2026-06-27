@@ -24,6 +24,8 @@ def escapeBuildConfigString = { value ->
 }
 
 def shareApiBaseUrl = readLocalConfig("SHARE_API_BASE_URL")
+def mapsApiKey = readLocalConfig("MAPS_API_KEY")
+def mapsSafeCode = readLocalConfig("MAPS_SAFE_CODE")
 def preferredKeystore = file('..\\keystore\\SchoolRun.jks')
 def legacyKeystore = file('..\\keystore\\GoGoGo.jks')
 def projectKeystore = preferredKeystore.exists() ? preferredKeystore : legacyKeystore
@@ -61,6 +63,8 @@ android {
         }
 
         buildConfigField "String", "SHARE_API_BASE_URL", "\"${escapeBuildConfigString(shareApiBaseUrl)}\""
+        buildConfigField "String", "MAPS_API_KEY", "\"${escapeBuildConfigString(mapsApiKey)}\""
+        buildConfigField "String", "MAPS_SAFE_CODE", "\"${escapeBuildConfigString(mapsSafeCode)}\""
     }
     buildTypes {
         release {

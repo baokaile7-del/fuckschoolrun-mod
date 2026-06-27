@@ -18,6 +18,7 @@ jobs:
       - name: Inject API Key
         run: |
           echo 'MAPS_API_KEY=test_key' >> local.properties
+          echo 'MAPS_SAFE_CODE=test_safe_code' >> local.properties
           cat local.properties
 
       - name: Set up JDK 17
