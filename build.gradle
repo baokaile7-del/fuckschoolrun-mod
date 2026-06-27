@@ -2,11 +2,9 @@
 
 buildscript {
     repositories {
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/central' }
-        maven { url 'https://maven.aliyun.com/repository/public' }
         google()
         mavenCentral()
+        maven { url 'https://maven.aliyun.com/repository/public' }
     }
 
     dependencies {
@@ -19,11 +17,9 @@ buildscript {
 
 allprojects {
     repositories {
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/central' }
-        maven { url 'https://maven.aliyun.com/repository/public' }
         google()
         mavenCentral()
+        maven { url 'https://maven.aliyun.com/repository/public' }
     }
 
     gradle.projectsEvaluated {

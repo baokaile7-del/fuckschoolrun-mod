@@ -50,7 +50,10 @@ public class WelcomeActivity extends AppCompatActivity {
     private View logoView;
     private View titleView;
     private View subtitleView;
+<<<<<<< HEAD
     private boolean startupFlowStarted;
+=======
+>>>>>>> 3ca7fc1c80ebc5267625704d5b172f90dbd90d2f
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
