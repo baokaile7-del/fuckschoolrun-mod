@@ -33,8 +33,6 @@ import com.acooldog.toolbox.utils.GoUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -43,15 +41,12 @@ public class WelcomeActivity extends AppCompatActivity {
     private static final String KEY_ACCEPT_PRIVACY = "KEY_ACCEPT_PRIVACY";
     private static final String KEY_ACCEPT_DISCLAIMER = "KEY_ACCEPT_DISCLAIMER";
     private static final int SDK_PERMISSION_REQUEST = 127;
-    private static final long SPLASH_DURATION_MILLIS = 1000L;
-    private static final long REMOTE_NOTICE_TIMEOUT_MILLIS = 1500L;
+    private static final long SPLASH_DURATION_MILLIS = 300L;
 
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private SharedPreferences preferences;
-    private ExecutorService ioExecutor;
     private boolean agreementAccepted;
     private boolean disclaimerAccepted;
-    private boolean startupFlowStarted;
     private View logoView;
     private View titleView;
     private View subtitleView;
@@ -64,7 +59,6 @@ public class WelcomeActivity extends AppCompatActivity {
         PreferenceManager.setDefaultValues(this, R.xml.preferences_main, false);
 
         preferences = getSharedPreferences(LEGAL_PREFS_NAME, MODE_PRIVATE);
-        ioExecutor = Executors.newSingleThreadExecutor();
         agreementAccepted = preferences.getBoolean(KEY_ACCEPT_AGREEMENT, false);
         disclaimerAccepted = preferences.getBoolean(
                 KEY_ACCEPT_DISCLAIMER,
@@ -82,9 +76,6 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         mainHandler.removeCallbacksAndMessages(null);
-        if (ioExecutor != null) {
-            ioExecutor.shutdownNow();
-        }
         super.onDestroy();
     }
 
@@ -233,77 +224,11 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void showEntryNoticeThenContinue() {
-        resolveEntryNoticeContent(content -> {
-            if (isFinishing() || isDestroyed()) {
-                return;
-            }
-            showEntryNoticeDialog(content);
-        });
-    }
-
-    private void resolveEntryNoticeContent(@NonNull EntryNoticeCallback callback) {
-        EntryNoticeContent fallback = EntryNoticeContent.local(this);
-        if (!GoUtils.isNetworkAvailable(this)) {
-            callback.onReady(fallback);
-            return;
-        }
-
-        AtomicBoolean delivered = new AtomicBoolean(false);
-        Runnable fallbackRunnable = () -> {
-            if (delivered.compareAndSet(false, true)) {
-                callback.onReady(fallback);
-            }
-        };
-        mainHandler.postDelayed(fallbackRunnable, REMOTE_NOTICE_TIMEOUT_MILLIS);
-
-        ioExecutor.execute(() -> {
-            EntryNoticeContent resolved = fallback;
-            try {
-                AppClientConfig config = ShareModule.from(getApplicationContext())
-                        .shareApiClient()
-                        .getAppClientConfig();
-                resolved = EntryNoticeContent.fromRemote(config, fallback);
-            } catch (Exception ignored) {
-                resolved = fallback;
-            }
-            EntryNoticeContent finalResolved = resolved;
-            runOnUiThread(() -> {
-                if (delivered.compareAndSet(false, true)) {
-                    mainHandler.removeCallbacks(fallbackRunnable);
-                    callback.onReady(finalResolved);
-                }
-            });
-        });
+        ensurePermissionsThenEnterHome();
     }
 
     private void showEntryNoticeDialog(@NonNull EntryNoticeContent content) {
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle(content.title)
-                .setMessage(content.buildDialogMessage())
-                .setCancelable(false)
-                .setPositiveButton(R.string.app_entry_notice_known, null)
-                .create();
-        if (!content.groupNumber.isEmpty()) {
-            dialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.app_entry_notice_copy_group), (d, which) -> {
-            });
-        }
-        if (!content.bilibiliUrl.isEmpty()) {
-            dialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.app_entry_notice_open_bilibili), (d, which) -> {
-            });
-        }
-        dialog.setOnShowListener(ignored -> {
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
-                dialog.dismiss();
-                ensurePermissionsThenEnterHome();
-            });
-            if (!content.groupNumber.isEmpty()) {
-                dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(v -> copyGroupNumber(content.groupNumber));
-            }
-            if (!content.bilibiliUrl.isEmpty()) {
-                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(v -> openBilibiliHomepage(content.bilibiliUrl));
-            }
-        });
-        dialog.show();
+        ensurePermissionsThenEnterHome();
     }
 
     private void copyGroupNumber(@NonNull String groupNumber) {
