@@ -1,44 +1,14 @@
-<p align="center">
-  <img src="./docs/images/牢大.jpg" height="80" alt="Toolbox logo" />
+大.jpg" height="80" alt="Toolbox logo" />
 </p>
 
 
-
-# 牢大肘击校园跑
-
-一个独立维护的 Android 虚拟定位、路线模拟与 NFC 工具项目，面向 Android 8.0+。
-
-## 当前能力
-
-- 路线绘制、地点搜索、本地保存、共享上传与下载
-- 路线模拟，支持记住上次速度、循环次数和最近路线
-- NFC 读取、模拟、共享与下载，支持记住上次 URL 与包名
-- 后端管理面板，可修改和删除用户上传的共享数据
-- 检测 Gitee 最新版本，显示更新日志和下载提示
-
-## 操作说明
-
-1. 首页点击“操作提示”卡片，可以查看完整教程。
-2. 绘制路线时可先搜索地点，再点击地图绘制路线。
-3. 路线模拟默认值为 `15m/s`、循环 `100`，并会自动记住上次配置。
-4. NFC 工具会自动记住上次输入的 URL、包名和来源。
-5. 如果学校有步频限制，可以在设置里面调整。
-
-## 本地配置
-
-请把本地敏感配置写在 `local.properties`：
-
-```properties
-sdk.dir=C\:\\path\\to\\Android\\Sdk
-MAPS_API_KEY=your_baidu_android_ak
-MAPS_SAFE_CODE=SHA1;com.acooldog.toolbox
 SHARE_API_BASE_URL=http://your-server-host:8080/
 ```
 
 当前 APK 包名：
 
 ```text
-com.acooldog.toolbox
+com.acoolg.toolbox
 ```
 
 ## 构建文档
